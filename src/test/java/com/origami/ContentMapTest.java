@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -15,12 +16,16 @@ public class ContentMapTest {
 
   private final static Integer MAP_SIZE = 20;
   private final Integer NUM_THREADS = 100;
+  private ContentMap contentMap;
+
+  @Before
+  public void setup(){
+    contentMap = new ContentMap(MAP_SIZE);
+  }
 
   @Test
   public void shouldAddContent(){
-    // Given
-    ContentMap contentMap = new ContentMap(MAP_SIZE);
-    // When
+    // Given / When
     contentMap.add("ID1", "SomeContent");
     // Then
     assertThat(contentMap.get("ID1"), equalTo("SomeContent"));
@@ -28,9 +33,7 @@ public class ContentMapTest {
 
   @Test
   public void shouldHoldMaxContent() {
-    // Given
-    ContentMap contentMap = new ContentMap(MAP_SIZE);
-    // When
+    // Given / When
     for ( int cnt = 0; cnt < MAP_SIZE; cnt++) {
       contentMap.add("ID"+cnt, "SomeContent"+cnt);
     }
@@ -42,9 +45,7 @@ public class ContentMapTest {
 
   @Test
   public void shouldDiscardIfOverMaxContent() throws InterruptedException {
-    // Given
-    ContentMap contentMap = new ContentMap(MAP_SIZE);
-    // When
+    // Given/When
     for ( int cnt = 0; cnt < MAP_SIZE + 1; cnt++) {
       Thread.sleep(10);
       contentMap.add("ID"+cnt, "SomeContent"+cnt);
@@ -59,7 +60,6 @@ public class ContentMapTest {
   @Test
   public void shouldAcceptMultipleThreads() throws InterruptedException, ExecutionException {
     // Given
-    ContentMap contentMap = new ContentMap(MAP_SIZE);
     ExecutorService executor = Executors.newFixedThreadPool(NUM_THREADS);
 
     Callable<Integer> task = () -> {
@@ -92,9 +92,7 @@ public class ContentMapTest {
 
   @Test
   public void shouldDiscardLeastViewed() throws InterruptedException {
-    // Given
-    ContentMap contentMap = new ContentMap(MAP_SIZE);
-    // When
+    // Given / When
     for ( int cnt = 0; cnt < MAP_SIZE + 1; cnt++) {
       Thread.sleep(10);
       contentMap.add("ID"+cnt, "SomeContent"+cnt);

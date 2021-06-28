@@ -54,9 +54,6 @@ public class ContentMap {
       return null; // do not keep a tally if not present
     }
     Integer cnt = tally.get(key);
-    if (cnt == null) {
-      cnt = 0;
-    }
     cnt++;
     tally.put(key, cnt);
     return mapData.getContent();
@@ -74,10 +71,7 @@ public class ContentMap {
      String keyToEject = null;
     Long minTime = Long.MAX_VALUE;
     // if no content has been requested tally map will be empty
-    if (!minCount.isPresent()) {
-      logger.severe("Invalid state");
-      System.exit(1);
-    } else {
+    if (minCount.isPresent()) {
       System.out.println("Min " + minCount.getAsInt());
       for (String key : tally.keySet()) {
         // find the oldest entry that has minCount requests

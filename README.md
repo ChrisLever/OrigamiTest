@@ -22,4 +22,12 @@ When the map is full and there is a request to add another value the least viewe
  
 The maps used in this implementation are concurrent to prevent any multi threading concurrency problems. Also the methods are synchronised so that method can not be accessed by multiple threads. This is tested in the ContentMapTest. 
 
+ ### Build and Run
+ In project directory run
+
+ ```mvn clean install```
+ 
+ ```java -jar target/origami-map-test-jar-with-dependencies.jar 20```
+ 
+ where 20 is the max size of the map
  
