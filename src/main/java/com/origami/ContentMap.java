@@ -1,9 +1,9 @@
 package com.origami;
 
-    import java.util.Date;
-    import java.util.OptionalInt;
-    import java.util.concurrent.ConcurrentHashMap;
-    import java.util.logging.Logger;
+import java.util.Date;
+import java.util.OptionalInt;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
 public class ContentMap {
 
@@ -28,17 +28,17 @@ public class ContentMap {
    * @return true if key is unique,  false if key already exists
    */
   public synchronized boolean add(String key, String content) {
-    if ( store.get(key) != null){
-      logger.warning("Key " + key +" already in store");
+    if (store.get(key) != null) {
+      logger.warning("Key " + key + " already in store");
       return false;
     }
-    logger.info("Adding key "+ key);
+    logger.info("Adding key " + key);
     ensureMapSize();
     MapData mapData = new MapData();
     mapData.setContent(content);
     mapData.setTime((new Date()).getTime());
     store.put(key, mapData);
-    tally.put(key,0);
+    tally.put(key, 0);
     return true;
   }
 
@@ -48,9 +48,9 @@ public class ContentMap {
    * @param key for the the content
    * @return content or null if no content matches the key
    */
-  public synchronized  String get(String key) {
+  public synchronized String get(String key) {
     MapData mapData = store.get(key);
-    if ( mapData == null){
+    if (mapData == null) {
       return null; // do not keep a tally if not present
     }
     Integer cnt = tally.get(key);
@@ -68,7 +68,7 @@ public class ContentMap {
       return;
     }
     OptionalInt minCount = tally.values().stream().mapToInt(v -> v).min();
-     String keyToEject = null;
+    String keyToEject = null;
     Long minTime = Long.MAX_VALUE;
     // if no content has been requested tally map will be empty
     if (minCount.isPresent()) {
@@ -85,7 +85,7 @@ public class ContentMap {
     if (keyToEject != null) {
       store.remove(keyToEject);
       tally.remove(keyToEject);
-      logger.info("Ejecting key "+ keyToEject);
+      logger.info("Ejecting key " + keyToEject);
 
     }
   }

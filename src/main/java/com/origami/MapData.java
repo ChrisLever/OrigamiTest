@@ -1,6 +1,7 @@
 package com.origami;
 
 public class MapData {
+
   private String content;
   private Long time;
 
